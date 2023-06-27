@@ -12,6 +12,6 @@ export class AppComponent {
   constructor(private themeService: ThemeService) {}
 
   toggleTheme(): void {
-    this.themeService.toggleTheme().then();
+    this.themeService.toggleTheme();
   }
 }

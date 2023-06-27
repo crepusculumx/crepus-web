@@ -1,11 +1,11 @@
 import { APP_INITIALIZER } from '@angular/core';
-import { ThemeService } from './theme.service';
+import { NzThemeService, NzThemeType } from './nz-theme.service';
 
 export const AppInitializerProvider = {
   provide: APP_INITIALIZER,
-  useFactory: (themeService: ThemeService) => () => {
-    return themeService.loadTheme();
+  useFactory: (themeService: NzThemeService) => () => {
+    return themeService.loadTheme(NzThemeType.default, true);
   },
-  deps: [ThemeService],
+  deps: [NzThemeService],
   multi: true,
 };
