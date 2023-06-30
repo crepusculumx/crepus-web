@@ -9,9 +9,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { LayoutComponent } from './layout.component';
+import { BlankComponent } from './blank/blank.component';
 
 @NgModule({
-  declarations: [BasicComponent, LayoutComponent],
+  declarations: [BasicComponent, LayoutComponent, BlankComponent],
   imports: [
     CommonModule,
     LayoutRoutingModule,
