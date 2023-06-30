@@ -10,6 +10,8 @@ readonly IMAGE_TAG=15
 
 readonly CONTAINER_FILE=dev.dockerfile
 
+readonly SHELL=zsh
+
 # 容器编号
 CONTAINER_ID=$(podman ps -aqf name="${CONTAINER_NAME}")
 
@@ -28,7 +30,7 @@ function container_action_stop() {
 function container_action_run_bash() {
   local CONTAINER_ID=$1
   shift
-  podman exec -it "${CONTAINER_ID}" /bin/bash
+  podman exec -it "${CONTAINER_ID}" /bin/${SHELL}
 }
 
 # 如果没有容器，创建个新的
@@ -45,7 +47,7 @@ if [ -z "${CONTAINER_ID}" ]; then
     --net="host" \
     --name="${CONTAINER_NAME}" \
     --volume="${PWD}:/code/${CONTAINER_NAME}" \
-    "${IMAGE_NAME}:${IMAGE_TAG}" /bin/bash
+    "${IMAGE_NAME}:${IMAGE_TAG}" /bin/${SHELL}
 
   # 建好了先关闭，之后统一管理
   CONTAINER_ID=$(podman ps -qf "name=${CONTAINER_NAME}")
