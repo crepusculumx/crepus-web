@@ -10,6 +10,8 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { LayoutComponent } from './layout.component';
 import { BlankComponent } from './blank/blank.component';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
   declarations: [BasicComponent, LayoutComponent, BlankComponent],
@@ -21,6 +23,8 @@ import { BlankComponent } from './blank/blank.component';
     NzIconModule,
     NzLayoutModule,
     NzMenuModule,
+    NzAffixModule,
+    NzButtonModule,
   ],
 })
 export class LayoutModule {}

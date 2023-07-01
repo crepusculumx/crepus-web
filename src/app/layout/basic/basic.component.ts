@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
+import { LayoutService } from '../services/layout.service';
 
 @Component({
   selector: 'layout-basic',
@@ -9,9 +10,8 @@ import { ThemeService } from '../../services/theme.service';
 })
 export class BasicComponent {
   isCollapsed$ = new BehaviorSubject<boolean>(false);
-  constructor(private themeService: ThemeService) {}
-
-  toggleTheme(): void {
-    this.themeService.toggleTheme();
-  }
+  constructor(
+    public themeService: ThemeService,
+    public layoutService: LayoutService
+  ) {}
 }

@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import { LayoutService } from '../services/layout.service';
 
 @Component({
-  selector: 'app-blank',
+  selector: 'layout-blank',
   templateUrl: './blank.component.html',
   styleUrls: ['./blank.component.less'],
 })
-export class BlankComponent {}
+export class BlankComponent {
+  constructor(public layoutService: LayoutService) {}
+}

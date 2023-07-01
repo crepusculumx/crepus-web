@@ -221,8 +221,11 @@
             [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"
           ></i>
         </span>
-        <span class="header-trigger" (click)="toggleTheme()">
+        <span class="header-trigger" (click)="themeService.toggleTheme()">
           <i class="trigger" nz-icon nzType="skin" nzTheme="outline"></i>
+        </span>
+        <span class="header-trigger" (click)="layoutService.enterBlank()">
+          <span nz-icon nzType="fullscreen" nzTheme="outline"></span>
         </span>
       </div>
     </nz-header>
