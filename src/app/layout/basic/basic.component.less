@@ -1,31 +1,6 @@
 @import "mixin";
 
-.themeMixin({
-  :host {
-    .sidebar-logo {
-      background: @primary-1;
-      h1 {
-        color: @text-color;
-      }
-    }
 
-    .app-header {
-      background: @layout-header-background;
-    }
-
-    .header-trigger {
-      color: @text-color;
-    }
-
-    .inner-content {
-      background: @layout-trigger-background;
-    }
-
-    .trigger:hover {
-      color: #1890ff;
-    }
-  }
-});
 
 :host {
   display: flex;
@@ -34,10 +9,13 @@
   -moz-osx-font-smoothing: grayscale;
 
   .app-layout {
-    height: 100vh;
+    min-height: 100vh;
 
     .menu-sidebar {
-      position: relative;
+      //position: relative;
+      overflow: auto;
+      height: 100%;
+      position: fixed;
       z-index: 10;
       min-height: 100vh;
       box-shadow: 2px 0 6px rgba(0,21,41,.35);
