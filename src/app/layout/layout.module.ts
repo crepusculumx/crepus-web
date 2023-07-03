@@ -12,9 +12,15 @@ import { LayoutComponent } from './layout.component';
 import { BlankComponent } from './blank/blank.component';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { MenusComponent } from './basic/widgets/menus/menus.component';
 
 @NgModule({
-  declarations: [BasicComponent, LayoutComponent, BlankComponent],
+  declarations: [
+    BasicComponent,
+    LayoutComponent,
+    BlankComponent,
+    MenusComponent,
+  ],
   imports: [
     CommonModule,
     LayoutRoutingModule,
