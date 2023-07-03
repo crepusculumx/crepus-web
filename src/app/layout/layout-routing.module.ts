@@ -5,7 +5,7 @@ import { LayoutComponent } from './layout.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
+    pathMatch: 'prefix', // forall
     component: LayoutComponent,
     loadChildren: () =>
       import('../routes/routes.module').then((m) => m.RoutesModule),
