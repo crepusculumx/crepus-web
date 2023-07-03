@@ -1,0 +1,8 @@
+<div [ngStyle]="{ height: (height$ | async) + 'px' }">
+  <iframe
+    #ifr
+    seamless
+    style="height: 100%; width: 100%; border: 0px"
+    src="assets/test.html"
+  ></iframe>
+</div>
