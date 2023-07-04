@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { Blog } from '../interfaces/blog';
+import { map, Observable, of } from 'rxjs';
+import { Blog, BlogTreeData } from '../interfaces/blog';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -17,5 +17,47 @@ export class BlogService {
         return blog;
       })
     );
+  }
+
+  getBlogTreeData$(): Observable<BlogTreeData> {
+    return of<BlogTreeData>([
+      {
+        title: 'a',
+        path: '/a',
+        children: [
+          {
+            title: 'b',
+            path: '/a/b',
+            children: [{ title: 'c', path: '/a/b/c' }],
+          },
+          { title: 'd', path: '/a/d' },
+        ],
+      },
+      {
+        title: 'a',
+        path: '/a',
+        children: [
+          {
+            title: 'b',
+            path: '/a/b',
+            children: [{ title: 'c', path: '/a/b/c' }],
+          },
+          { title: 'd', path: '/a/d' },
+        ],
+      },
+      {
+        title: 'a',
+        path: '/a',
+        children: [
+          {
+            title: 'b',
+            path: '/a/b',
+            children: [{ title: 'c', path: '/a/b/c' }],
+          },
+          { title: 'd', path: '/a/d' },
+        ],
+      },
+    ]);
+    return this.httpClient.get<BlogTreeData>('');
   }
 }
