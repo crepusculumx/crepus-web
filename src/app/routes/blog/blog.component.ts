@@ -1,30 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BlogService } from '../../services/blog.service';
-
-import {
-  Menu,
-  Menus,
-  MenusService,
-} from '../../../../layout/services/menus.service';
+import { BlogService } from './services/blog.service';
+import { Menu, Menus, MenusService } from '../../layout/services/menus.service';
+import { BlogTreeData } from './interfaces/blog';
 import { AsyncSubject, map, takeUntil } from 'rxjs';
-import { BlogTreeData } from '../../interfaces/blog';
 
 @Component({
   selector: 'app-blog',
-  templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.less'],
+  template: '<router-outlet></router-outlet>',
 })
 export class BlogComponent implements OnInit, OnDestroy {
   constructor(
-    public blogService: BlogService,
+    private blogService: BlogService,
     private menusService: MenusService
   ) {}
 
   private destroy$ = new AsyncSubject<boolean>();
-  private blogTreeData$ = this.blogService.getBlogTreeData$();
-  ngOnInit() {
-    this.setMenu();
-  }
 
   setMenu() {
     function buildMenuFromBlog(
@@ -37,7 +27,7 @@ export class BlogComponent implements OnInit, OnDestroy {
             disabled: false,
             icon: 'file',
             level: level,
-            routerLink: ['blog', ...blogTreeNode.path.split('/')],
+            routerLink: ['/blog', 'file', encodeURI(blogTreeNode.path)],
             selected: false,
             title: blogTreeNode.title,
           };
@@ -55,7 +45,8 @@ export class BlogComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.blogTreeData$
+    this.blogService
+      .getBlogTreeData$()
       .pipe(
         takeUntil(this.destroy$),
         map((blogTreeData: BlogTreeData): Menus => {
@@ -64,6 +55,11 @@ export class BlogComponent implements OnInit, OnDestroy {
       )
       .subscribe(this.menusService.menus$);
   }
+
+  ngOnInit() {
+    this.setMenu();
+  }
+
   ngOnDestroy() {
     this.destroy$.next(true);
   }

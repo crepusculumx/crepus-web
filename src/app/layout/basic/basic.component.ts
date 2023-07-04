@@ -14,11 +14,7 @@ export class BasicComponent {
     public themeService: ThemeService,
     public layoutService: LayoutService,
     public menuService: MenusService
-  ) {
-    menuService.menus$.subscribe((_) => {
-      console.log(_);
-    });
-  }
+  ) {}
 
   public isCollapsed$ = new BehaviorSubject<boolean>(false);
 

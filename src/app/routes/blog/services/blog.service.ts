@@ -12,7 +12,7 @@ export class BlogService {
   getBlog(): Observable<Blog> {
     return this.httpClient.get<Blog>('http://localhost:8080/blog').pipe(
       map((blog) => {
-        // blog.context = 'data:text/html,' + blog.context;
+        // blog-content.context = 'data:text/html,' + blog-content.context;
         console.log(blog);
         return blog;
       })
@@ -58,6 +58,6 @@ export class BlogService {
         ],
       },
     ]);
-    return this.httpClient.get<BlogTreeData>('');
+    // return this.httpClient.get<BlogTreeData>('');
   }
 }
