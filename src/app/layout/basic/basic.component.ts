@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
 import { LayoutService } from '../services/layout.service';
 import { Menus, MenusService } from '../services/menus.service';
@@ -22,5 +22,8 @@ export class BasicComponent {
 
   public isCollapsed$ = new BehaviorSubject<boolean>(false);
 
-  public menus$: BehaviorSubject<Menus> = this.menuService.menus$;
+  //ExpressionChangedAfterItHasBeenCheckedError
+  //如果子组件构造时立刻通知修改menus，则会出现在变更检测中子组件更改父组件的情形
+  //通过delay(0)延迟到下一个周期变更检测周期
+  public menus$: Observable<Menus> = this.menuService.menus$.pipe(delay(0));
 }

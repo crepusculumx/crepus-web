@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Menus } from '../../../services/menus.service';
 
 @Component({
@@ -6,10 +6,6 @@ import { Menus } from '../../../services/menus.service';
   templateUrl: './menus.component.html',
   styleUrls: ['./menus.component.less'],
 })
-export class MenusComponent implements OnInit {
+export class MenusComponent {
   @Input() menus: Menus = [];
-
-  ngOnInit(): void {
-    console.log(this.menus);
-  }
 }
