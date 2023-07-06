@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { IconsProviderModule } from './icons-provider.module';
 import { AppInitializerProvider } from './services/app-initializer.service';
 import { LayoutModule } from './layout/layout.module';
+import { httpInterceptorProviders } from './interceptors';
 registerLocaleData(zh);
 
 @NgModule({
@@ -26,7 +27,11 @@ registerLocaleData(zh);
     IconsProviderModule,
     LayoutModule, // eagerly loaded
   ],
-  providers: [AppInitializerProvider, { provide: NZ_I18N, useValue: zh_CN }],
+  providers: [
+    AppInitializerProvider,
+    { provide: NZ_I18N, useValue: zh_CN },
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
