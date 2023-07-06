@@ -36,7 +36,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
-
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 export const SHARED_ZORRO_MODULES = [
   NzFormModule,
   NzGridModule,
@@ -76,4 +76,5 @@ export const SHARED_ZORRO_MODULES = [
   NzLayoutModule,
   NzMenuModule,
   NzAffixModule,
+  NzPageHeaderModule,
 ];
