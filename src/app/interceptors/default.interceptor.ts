@@ -14,7 +14,6 @@ export class DefaultInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    console.log(environment.api.baseUrl);
     if (request.url.startsWith('http')) {
       return next.handle(request);
     }
