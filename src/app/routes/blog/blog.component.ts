@@ -27,7 +27,7 @@ export class BlogComponent implements OnInit, OnDestroy {
             disabled: false,
             icon: 'file',
             level: level,
-            routerLink: ['/blog', 'file', encodeURI(blogTreeNode.path)],
+            routerLink: ['/blog', 'file', blogTreeNode.path],
             selected: false,
             title: blogTreeNode.title,
           };

@@ -37,6 +37,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzCascaderModule } from 'ng-zorro-antd/cascader';
 export const SHARED_ZORRO_MODULES = [
   NzFormModule,
   NzGridModule,
@@ -77,4 +78,5 @@ export const SHARED_ZORRO_MODULES = [
   NzMenuModule,
   NzAffixModule,
   NzPageHeaderModule,
+  NzCascaderModule,
 ];
