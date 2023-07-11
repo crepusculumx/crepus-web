@@ -53,7 +53,9 @@ export class BlogComponent implements OnInit, OnDestroy {
           return buildMenuFromBlog(blogTreeData, 1);
         })
       )
-      .subscribe(this.menusService.menus$);
+      .subscribe((menus) => {
+        this.menusService.menus$.next(menus);
+      });
   }
 
   ngOnInit() {

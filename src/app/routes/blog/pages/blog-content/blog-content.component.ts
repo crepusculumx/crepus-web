@@ -123,7 +123,9 @@ export class BlogContentComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(this.blogFileType$);
+      .subscribe((fileType) => {
+        this.blogFileType$.next(fileType);
+      });
   }
 
   /**
@@ -215,7 +217,9 @@ export class BlogContentComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(this.blogThemeType$);
+      .subscribe((themeType) => {
+        this.blogThemeType$.next(themeType);
+      });
   }
   ngOnInit() {
     this.startBlogFileType();
