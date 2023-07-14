@@ -1,5 +1,5 @@
-<ng-container *ngIf="iframeUrl$ | async as iframeUrl">
+<ng-container *ngIf="curIframeUrl$ | async as iframeUrl">
   <div [ngStyle]="{ height: (height$ | async) + 'px' }">
-    <iframe #ifr seamless [src]="iframeUrl | safeUrl"></iframe>
+    <iframe seamless [src]="iframeUrl | safeUrl"></iframe>
   </div>
 </ng-container>

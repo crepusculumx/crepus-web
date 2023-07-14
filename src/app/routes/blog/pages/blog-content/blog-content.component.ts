@@ -58,12 +58,21 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 该路径为user内的路径，如/folder/some-page.html
    * @private
    */
-  private blogPath$: Observable<string> = this.route.paramMap.pipe(
-    map((params: ParamMap) => {
-      return params.get('filePath');
-    }),
-    filter((value): value is string => value !== null)
-  );
+  private blogPath$ = new ReplaySubject<string>();
+
+  private startBlogPath() {
+    this.route.paramMap
+      .pipe(
+        map((params: ParamMap) => {
+          return params.get('filePath');
+        }),
+        filter((value): value is string => value !== null),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((path) => {
+        this.blogPath$.next(path);
+      });
+  }
 
   public breadcrumbs$: Observable<string[]> = this.blogPath$.pipe(
     map((path) => {
@@ -222,6 +231,7 @@ export class BlogContentComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit() {
+    this.startBlogPath();
     this.startBlogFileType();
     this.startBlogThemeType();
   }

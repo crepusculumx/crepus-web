@@ -8,6 +8,7 @@ import {
   startWith,
   switchMap,
   takeUntil,
+  timer,
 } from 'rxjs';
 
 // Blocked a frame with origin “xxx“ from accessing a cross-origin frame
@@ -41,6 +42,24 @@ export class FullIframeComponent implements OnInit, OnDestroy {
   @Input()
   public iframeUrl$!: Observable<string>;
 
+  public curIframeUrl$ = new ReplaySubject<string | null>();
+
+  /**
+   * 如果切换iframe的url，会导致浏览器将切换记录保存到历史记录，使后退键错乱（从后退路由改为后退iframe url）。
+   * 因此当iframeUrl变化时，创建新的iframe。
+   * @private
+   */
+  private startCurIframeUrl() {
+    this.iframeUrl$.pipe(takeUntil(this.destroy$)).subscribe((url) => {
+      this.curIframeUrl$.next(null);
+      timer(0)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.curIframeUrl$.next(url);
+        });
+    });
+  }
+
   private destroy$ = new AsyncSubject<boolean>();
 
   public height$ = new ReplaySubject<number>(1);
@@ -63,6 +82,7 @@ export class FullIframeComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit() {
+    this.startCurIframeUrl();
     this.startHeight();
   }
 
