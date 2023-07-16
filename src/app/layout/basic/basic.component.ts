@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { BehaviorSubject, delay, Observable } from 'rxjs';
 import { ThemeService } from '../../services/theme.service';
 import { LayoutService } from '../services/layout.service';
-import { Menus, MenusService } from '../services/menus.service';
+import { MenusService } from '../services/menus.service';
+import { Menus } from '../interfaces/menu';
 
 @Component({
   selector: 'layout-basic',

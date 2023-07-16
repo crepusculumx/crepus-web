@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Menus } from '../../../services/menus.service';
+
+import { Menus } from '../../../interfaces/menu';
 
 @Component({
   selector: 'layout-menus',
