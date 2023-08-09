@@ -27,7 +27,7 @@ function container_action_stop() {
   podman stop "${CONTAINER_ID}"
 }
 
-function container_action_run_bash() {
+function container_action_shell() {
   local CONTAINER_ID=$1
   shift
   podman exec -it "${CONTAINER_ID}" /bin/${SHELL}
@@ -75,7 +75,12 @@ start)
   if [ $CUR_STATE == stop ]; then
     container_action_start "${CONTAINER_ID}"
   fi
-  container_action_run_bash "${CONTAINER_ID}"
+  ;;
+shell)
+  if [ $CUR_STATE == stop ]; then
+    container_action_start "${CONTAINER_ID}"
+  fi
+  container_action_shell "${CONTAINER_ID}"
   ;;
 stop)
   if [ $CUR_STATE == run ]; then
