@@ -1,0 +1,30 @@
+<ul nz-menu nzMode="inline" style="width: 240px">
+  <ng-container *ngFor="let menu of menus">
+    <li
+      *ngIf="!menu.children"
+      nz-menu-item
+      [nzPaddingLeft]="menu.level * 24"
+      [nzDisabled]="menu.disabled"
+      [nzSelected]="menu.selected"
+      nzMatchRouter
+    >
+      <span nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></span>
+      <span class="menu-title" [routerLink]="menu.routerLink">{{
+        menu.title
+      }}</span>
+    </li>
+    <li
+      *ngIf="menu.children"
+      nz-submenu
+      [nzPaddingLeft]="menu.level * 24"
+      [nzOpen]="menu.open"
+      [nzTitle]="menu.title"
+      [nzIcon]="menu.icon"
+      [nzDisabled]="menu.disabled"
+    >
+      <ul>
+        <layout-menus [menus]="menu.children"></layout-menus>
+      </ul>
+    </li>
+  </ng-container>
+</ul>

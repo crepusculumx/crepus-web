@@ -3,12 +3,15 @@
 SCRIPT_ACTION=$1
 shift
 
-readonly CONTAINER_NAME=crepus-web
+readonly CONTAINER_NAME=crepus-web-prod
 
-readonly IMAGE_NAME=angular
-readonly IMAGE_TAG=15
+readonly IMAGE_NAME=nginx
+readonly IMAGE_TAG=1
 
-readonly CONTAINER_FILE=dev.dockerfile
+readonly CONTAINER_FILE=prod.dockerfile
+
+readonly SHELL=zsh
+
 
 # 容器编号
 CONTAINER_ID=$(podman ps -aqf name="${CONTAINER_NAME}")
@@ -25,10 +28,10 @@ function container_action_stop() {
   podman stop "${CONTAINER_ID}"
 }
 
-function container_action_run_bash() {
+function container_action_shell() {
   local CONTAINER_ID=$1
   shift
-  podman exec -it "${CONTAINER_ID}" /bin/bash
+  podman exec -it "${CONTAINER_ID}" /bin/${SHELL}
 }
 
 # 如果没有容器，创建个新的
@@ -42,10 +45,10 @@ if [ -z "${CONTAINER_ID}" ]; then
 
   podman run \
     -itd \
-    --net="host" \
+    -p=80:80 \
     --name="${CONTAINER_NAME}" \
-    --volume="${PWD}:/code/${CONTAINER_NAME}" \
-    "${IMAGE_NAME}:${IMAGE_TAG}" /bin/bash
+    --volume="${PWD}/html:/var/www/html" \
+    "${IMAGE_NAME}:${IMAGE_TAG}" /bin/${SHELL}
 
   # 建好了先关闭，之后统一管理
   CONTAINER_ID=$(podman ps -qf "name=${CONTAINER_NAME}")
@@ -73,7 +76,12 @@ start)
   if [ $CUR_STATE == stop ]; then
     container_action_start "${CONTAINER_ID}"
   fi
-  container_action_run_bash "${CONTAINER_ID}"
+  ;;
+shell)
+  if [ $CUR_STATE == stop ]; then
+    container_action_start "${CONTAINER_ID}"
+  fi
+  container_action_shell "${CONTAINER_ID}"
   ;;
 stop)
   if [ $CUR_STATE == run ]; then

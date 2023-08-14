@@ -1,0 +1,26 @@
+<ng-container *ngIf="curIframeUrl$ | async as iframeUrl">
+  <div [ngStyle]="{ height: (height$ | async) + 'px' }">
+    <iframe seamless [src]="iframeUrl | safeUrl"></iframe>
+  </div>
+</ng-container>
+
+<!--Blocked a frame with origin “xxx“ from accessing a cross-origin frame-->
+<!--script in iframe-->
+<!--<script>-->
+<!--  function sendMessage() {-->
+<!--    const height = document.body.clientHeight;-->
+<!--    window.parent.postMessage(-->
+<!--      {-->
+<!--        height: height,-->
+<!--      },-->
+<!--      "*"-->
+<!--    );-->
+<!--  }-->
+<!--  window.addEventListener("resize", function () {-->
+<!--    sendMessage();-->
+<!--  });-->
+
+<!--  window.addEventListener("load", function () {-->
+<!--    sendMessage();-->
+<!--  });-->
+<!--</script>-->

@@ -11,9 +11,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { IconsProviderModule } from './icons-provider.module';
-import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
-
+import { AppInitializerProvider } from './services/app-initializer.service';
+import { LayoutModule } from './layout/layout.module';
+import { httpInterceptorProviders } from './interceptors';
 registerLocaleData(zh);
 
 @NgModule({
@@ -25,10 +25,13 @@ registerLocaleData(zh);
     BrowserAnimationsModule,
     AppRoutingModule,
     IconsProviderModule,
-    NzLayoutModule,
-    NzMenuModule,
+    LayoutModule, // eagerly loaded
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
+  providers: [
+    AppInitializerProvider,
+    { provide: NZ_I18N, useValue: zh_CN },
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

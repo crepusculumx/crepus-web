@@ -1,0 +1,14 @@
+<!--<nz-page-header-->
+<!--  class="site-page-header"-->
+<!--  [nzTitle]="(blogInfo$ | async)?.title"-->
+<!--  [nzGhost]="false"-->
+<!--&gt;-->
+<!--  <nz-breadcrumb nzSeparator=">" nz-page-header-breadcrumb>-->
+<!--    <ng-container *ngIf="breadcrumbs$ | async as breadcrumbs">-->
+<!--      <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs">-->
+<!--        {{ breadcrumb }}-->
+<!--      </nz-breadcrumb-item>-->
+<!--    </ng-container>-->
+<!--  </nz-breadcrumb>-->
+<!--</nz-page-header>-->
+<app-html-doc [docUrl$]="docUrl$"></app-html-doc>
