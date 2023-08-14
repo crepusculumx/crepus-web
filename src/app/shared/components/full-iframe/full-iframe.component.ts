@@ -13,22 +13,24 @@ import {
 
 // Blocked a frame with origin “xxx“ from accessing a cross-origin frame
 // script in iframe
-// function sendMessage() {
-//   const height = document.body.clientHeight;
-//   window.parent.postMessage(
-//     {
-//       height: height,
-//     },
-//     '*'
-//   );
-// }
-// window.addEventListener('resize', function () {
+// <script>
+//   function sendMessage() {
+//     const height = document.body.clientHeight;
+//     window.parent.postMessage(
+//       {
+//         height: height,
+//       },
+//       "*"
+//     );
+//   }
+// window.addEventListener("resize", function () {
 //   sendMessage();
 // });
 //
-// window.addEventListener('load', function () {
+// window.addEventListener("load", function () {
 //   sendMessage();
 // });
+// </script>
 interface IframeMsg extends Event {
   data: { height: number };
 }
@@ -70,7 +72,8 @@ export class FullIframeComponent implements OnInit, OnDestroy {
         switchMap(() => {
           return fromEvent(window, 'message').pipe(
             map((message): number => {
-              return (message as IframeMsg).data.height;
+              // magic number. 一些情况下，iframe html高度大于iframe内返回的document.body.clientHeight
+              return (message as IframeMsg).data.height + 100;
             }),
             startWith(document.body.clientHeight * 0.7) // default height
           );
