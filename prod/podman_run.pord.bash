@@ -3,14 +3,15 @@
 SCRIPT_ACTION=$1
 shift
 
-readonly CONTAINER_NAME=crepus-web
+readonly CONTAINER_NAME=crepus-web-prod
 
-readonly IMAGE_NAME=angular
-readonly IMAGE_TAG=15
+readonly IMAGE_NAME=nginx
+readonly IMAGE_TAG=1
 
-readonly CONTAINER_FILE=dev.dockerfile
+readonly CONTAINER_FILE=prod.dockerfile
 
 readonly SHELL=zsh
+
 
 # 容器编号
 CONTAINER_ID=$(podman ps -aqf name="${CONTAINER_NAME}")
@@ -44,9 +45,9 @@ if [ -z "${CONTAINER_ID}" ]; then
 
   podman run \
     -itd \
-    --net="host" \
+    -p=80:80 \
     --name="${CONTAINER_NAME}" \
-    --volume="${PWD}:/code/${CONTAINER_NAME}" \
+    --volume="${PWD}/html:/var/www/html" \
     "${IMAGE_NAME}:${IMAGE_TAG}" /bin/${SHELL}
 
   # 建好了先关闭，之后统一管理

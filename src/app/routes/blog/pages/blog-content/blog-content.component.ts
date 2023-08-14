@@ -191,7 +191,12 @@ export class BlogContentComponent implements OnInit, OnDestroy {
       });
       if (res) {
         // todo user
-        return environment.api.baseUrl + 'blog/' + 'default-user' + res.urlPath;
+        return (
+          environment.api.baseUrl +
+          'public/blog/' +
+          'default-user' +
+          res.urlPath
+        );
       }
       return '';
     })
