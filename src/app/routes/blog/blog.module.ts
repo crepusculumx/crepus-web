@@ -9,6 +9,7 @@ import { HtmlDocComponent } from './pages/blog-content/widgets/html-doc/html-doc
 import { BlogWelcomeComponent } from './pages/blog-welcome/blog-welcome.component';
 import { BlogComponent } from './blog.component';
 import { UserCardsComponent } from './pages/blog-welcome/widgets/user-cards/user-cards.component';
+import { ImgDocComponent } from './pages/blog-content/widgets/img-doc/img-doc.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { UserCardsComponent } from './pages/blog-welcome/widgets/user-cards/user
     BlogWelcomeComponent,
     BlogComponent,
     UserCardsComponent,
+    ImgDocComponent,
   ],
   imports: [CommonModule, BlogRoutingModule, SharedModule],
 })
