@@ -8,6 +8,7 @@ import { BlogContentComponent } from './pages/blog-content/blog-content.componen
 import { HtmlDocComponent } from './pages/blog-content/widgets/html-doc/html-doc.component';
 import { BlogWelcomeComponent } from './pages/blog-welcome/blog-welcome.component';
 import { BlogComponent } from './blog.component';
+import { UserCardsComponent } from './pages/blog-welcome/widgets/user-cards/user-cards.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { BlogComponent } from './blog.component';
     HtmlDocComponent,
     BlogWelcomeComponent,
     BlogComponent,
+    UserCardsComponent,
   ],
   imports: [CommonModule, BlogRoutingModule, SharedModule],
 })
