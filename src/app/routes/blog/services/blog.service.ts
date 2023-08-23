@@ -19,6 +19,7 @@ export class BlogService {
     private userService: UserService
   ) {
     this.setDefaultUserName();
+    this.startCachingUserName();
   }
 
   private prefCacheKey = 'BlogServicePreferences';
@@ -40,13 +41,23 @@ export class BlogService {
   }
   private setDefaultUserName() {
     if (this.cacheService.has(this.prefCacheKey)) {
-      this._curUserName$.next(this.cacheService.get(this.prefCacheKey));
+      this._curUserName$.next(
+        this.cacheService.get<Preference>(this.prefCacheKey).defaultUserName
+      );
       return;
     }
 
     this.userService.getUserInfos$().subscribe((userInfos) => {
       if (userInfos.length === 0) return;
       this._curUserName$.next(userInfos[0].userName);
+    });
+  }
+
+  private startCachingUserName() {
+    this._curUserName$.subscribe((userName) => {
+      this.cacheService.set<Preference>(this.prefCacheKey, {
+        defaultUserName: userName,
+      });
     });
   }
 }
