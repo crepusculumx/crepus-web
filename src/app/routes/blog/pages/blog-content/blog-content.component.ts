@@ -138,7 +138,7 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 当前选中的文件类型（filetype）
    * @private
    */
-  private blogFileType$ = new ReplaySubject<StFileType>(1);
+  public blogFileType$ = new ReplaySubject<StFileType>(1);
 
   /**
    * blogFileType$的订阅
@@ -151,7 +151,14 @@ export class BlogContentComponent implements OnInit, OnDestroy {
         map((fileTypes): StFileType => {
           const setFileTypes: Set<FileType> = new Set(fileTypes.value);
           // 默认显示优先级
-          const primaries: FileType[] = ['html', 'pdf', 'md', 'default'];
+          const primaries: FileType[] = [
+            'html',
+            'jpg',
+            'png',
+            'pdf',
+            'md',
+            'default',
+          ];
           for (const primary of primaries) {
             if (setFileTypes.has(primary)) {
               return { stamp: fileTypes.stamp, value: primary };
