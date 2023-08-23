@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BlogService } from './services/blog.service';
 import { MenusService } from '../../layout/services/menus.service';
 import { BlogTreeData } from './interfaces/blog';
-import { AsyncSubject, filter, map, switchMap, takeUntil } from 'rxjs';
+import { AsyncSubject, map, switchMap, takeUntil } from 'rxjs';
 import { Menu, Menus } from '../../layout/interfaces/menu';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-blog',

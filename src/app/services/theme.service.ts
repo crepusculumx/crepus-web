@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NzThemeService, NzThemeType } from './nz-theme.service';
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CacheService } from './cache.service';
 
 export enum ThemeType {
