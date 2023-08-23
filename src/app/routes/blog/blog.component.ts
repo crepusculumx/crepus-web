@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BlogService } from './services/blog.service';
 import { MenusService } from '../../layout/services/menus.service';
 import { BlogTreeData } from './interfaces/blog';
-import { AsyncSubject, map, takeUntil } from 'rxjs';
+import { AsyncSubject, map, switchMap, takeUntil } from 'rxjs';
 import { Menu, Menus } from '../../layout/interfaces/menu';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-blog',
@@ -12,13 +13,15 @@ import { Menu, Menus } from '../../layout/interfaces/menu';
 export class BlogComponent implements OnInit, OnDestroy {
   constructor(
     private blogService: BlogService,
-    private menusService: MenusService
+    private menusService: MenusService,
+    private route: ActivatedRoute
   ) {}
 
   private destroy$ = new AsyncSubject<boolean>();
 
   setMenu() {
     function buildMenuFromBlog(
+      userName: string,
       blogTreeData: BlogTreeData,
       level: number
     ): Menus {
@@ -28,13 +31,17 @@ export class BlogComponent implements OnInit, OnDestroy {
             disabled: false,
             icon: 'file',
             level: level,
-            routerLink: ['/blog', 'file', blogTreeNode.path],
+            routerLink: ['blog', userName, 'file', blogTreeNode.path],
             selected: false,
             title: blogTreeNode.title,
           };
         } else {
           return {
-            children: buildMenuFromBlog(blogTreeNode.children, level + 1),
+            children: buildMenuFromBlog(
+              userName,
+              blogTreeNode.children,
+              level + 1
+            ),
             open: false,
             disabled: false,
             icon: 'folder',
@@ -46,15 +53,29 @@ export class BlogComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.blogService
-      .getBlogTreeData$()
+    this.blogService.curUserName$
       .pipe(
-        takeUntil(this.destroy$),
-        map((blogTreeData: BlogTreeData): Menus => {
-          return buildMenuFromBlog(blogTreeData, 1);
-        })
+        switchMap((userName: string) => {
+          return this.blogService.getBlogTreeData$(userName).pipe(
+            map((blogTreeData) => {
+              return { userName: userName, blogTreeData: blogTreeData };
+            })
+          );
+        }),
+        map((value): Menus => {
+          return buildMenuFromBlog(value.userName, value.blogTreeData, 1);
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe((menus) => {
+        menus.unshift({
+          disabled: false,
+          icon: 'file',
+          level: 1,
+          routerLink: ['blog', 'welcome'],
+          selected: false,
+          title: '首页',
+        });
         this.menusService.menus$.next(menus);
       });
   }

@@ -1,14 +1,27 @@
-<!--<nz-page-header-->
-<!--  class="site-page-header"-->
-<!--  [nzTitle]="(blogInfo$ | async)?.title"-->
-<!--  [nzGhost]="false"-->
-<!--&gt;-->
-<!--  <nz-breadcrumb nzSeparator=">" nz-page-header-breadcrumb>-->
-<!--    <ng-container *ngIf="breadcrumbs$ | async as breadcrumbs">-->
-<!--      <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs">-->
-<!--        {{ breadcrumb }}-->
-<!--      </nz-breadcrumb-item>-->
-<!--    </ng-container>-->
-<!--  </nz-breadcrumb>-->
-<!--</nz-page-header>-->
-<app-html-doc [docUrl$]="docUrl$"></app-html-doc>
+<nz-space nzDirection="vertical" style="width: 100%">
+  <ng-container *ngIf="blogInfo$ | async as blogInfo">
+    <nz-page-header
+      *nzSpaceItem
+      class="site-page-header"
+      [nzTitle]="blogInfo.value.title"
+      [nzGhost]="false"
+    >
+      <nz-breadcrumb nzSeparator=">" nz-page-header-breadcrumb>
+        <ng-container *ngIf="breadcrumbs$ | async as breadcrumbs">
+          <nz-breadcrumb-item *ngFor="let breadcrumb of breadcrumbs">
+            {{ breadcrumb }}
+          </nz-breadcrumb-item>
+        </ng-container>
+      </nz-breadcrumb>
+    </nz-page-header>
+  </ng-container>
+
+  <ng-container *ngIf="blogFileType$ | async as fileType">
+    <ng-container *ngIf="fileType.value === 'html'">
+      <app-html-doc *nzSpaceItem [docUrl$]="docUrl$"></app-html-doc>
+    </ng-container>
+    <ng-container *ngIf="fileType.value === 'jpg'">
+      <app-img-doc *nzSpaceItem [docUrl$]="docUrl$"></app-img-doc>
+    </ng-container>
+  </ng-container>
+</nz-space>

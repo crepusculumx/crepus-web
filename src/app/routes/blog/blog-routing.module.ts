@@ -14,12 +14,12 @@ const routes: Routes = [
         component: BlogWelcomeComponent,
       },
       {
-        path: 'file/:filePath',
+        path: ':userName/file/:filePath',
         component: BlogContentComponent,
       },
       {
-        path: '',
-        pathMatch: 'full',
+        path: '**',
+        // pathMatch: 'prefix',
         redirectTo: 'welcome',
       },
     ],

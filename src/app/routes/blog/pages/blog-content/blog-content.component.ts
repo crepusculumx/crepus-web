@@ -32,11 +32,16 @@ interface StampedType<T> {
   value: T;
 }
 
-type StampedFileType = StampedType<FileType>;
-type StampedFileTypes = StampedType<FileTypes>;
+type StBlogPath = StampedType<string>;
+type StUserName = StampedType<string>;
 
-type StampedThemeType = StampedType<ThemeType>;
-type StampedThemeTypes = StampedType<ThemeTypes>;
+type StBlogInfo = StampedType<BlogInfo>;
+
+type StFileType = StampedType<FileType>;
+type StFileTypes = StampedType<FileTypes>;
+
+type StThemeType = StampedType<ThemeType>;
+type StThemeTypes = StampedType<ThemeTypes>;
 
 @Component({
   selector: 'app-blog-content',
@@ -53,30 +58,44 @@ export class BlogContentComponent implements OnInit, OnDestroy {
 
   private destroy$ = new AsyncSubject<boolean>();
 
+  private userName$ = new ReplaySubject<StUserName>();
+
   /**
    * 通过url参数获取当前页面在浏览哪篇blog的路径标识
    * 该路径为user内的路径，如/folder/some-page.html
    * @private
    */
-  private blogPath$ = new ReplaySubject<string>();
+  private blogPath$ = new ReplaySubject<StBlogPath>();
 
-  private startBlogPath() {
+  private startGetParamsFromRoute() {
     this.route.paramMap
       .pipe(
         map((params: ParamMap) => {
-          return params.get('filePath');
+          return {
+            userName: params.get('userName'),
+            blogPath: params.get('filePath'),
+          };
         }),
-        filter((value): value is string => value !== null),
+        filter((params): params is { userName: string; blogPath: string } => {
+          return params.userName != null && params.blogPath != null;
+        }),
         takeUntil(this.destroy$)
       )
-      .subscribe((path) => {
-        this.blogPath$.next(path);
+      .subscribe((params) => {
+        this.blogPath$.next({
+          stamp: JSON.stringify(params),
+          value: params.blogPath,
+        });
+        this.userName$.next({
+          stamp: JSON.stringify(params),
+          value: params.userName,
+        });
       });
   }
 
   public breadcrumbs$: Observable<string[]> = this.blogPath$.pipe(
     map((path) => {
-      return path.split('/');
+      return path.value.split('/');
     })
   );
 
@@ -84,9 +103,19 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 当前blog的详细信息
    * @public
    */
-  public blogInfo$: Observable<BlogInfo> = this.blogPath$.pipe(
-    switchMap((curBlogPath: string) => {
-      return this.blogService.getBlogInfo$(curBlogPath);
+  public blogInfo$: Observable<StBlogInfo> = combineLatest([
+    this.userName$,
+    this.blogPath$,
+  ]).pipe(
+    filter(([userName, blogPath]) => {
+      return userName.stamp === blogPath.stamp;
+    }),
+    switchMap(([userName, blogPath]) => {
+      return this.blogService.getBlogInfo$(userName.value, blogPath.value).pipe(
+        map((blogInfo: BlogInfo): StBlogInfo => {
+          return { stamp: blogPath.stamp, value: blogInfo };
+        })
+      );
     })
   );
 
@@ -94,11 +123,11 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 当前blog支持的文件类型（filetype）列表
    * @private
    */
-  private blogFiletypes$: Observable<StampedFileTypes> = this.blogInfo$.pipe(
-    map((blogInfo: BlogInfo): StampedFileTypes => {
+  private blogFiletypes$: Observable<StFileTypes> = this.blogInfo$.pipe(
+    map((blogInfo): StFileTypes => {
       return {
-        stamp: blogInfo.path,
-        value: blogInfo.blogFileInfos.map((fileInfo: BlogFileInfo) => {
+        stamp: blogInfo.stamp,
+        value: blogInfo.value.blogFileInfos.map((fileInfo: BlogFileInfo) => {
           return fileInfo.fileType;
         }),
       };
@@ -109,7 +138,7 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 当前选中的文件类型（filetype）
    * @private
    */
-  private blogFileType$ = new ReplaySubject<StampedFileType>(1);
+  public blogFileType$ = new ReplaySubject<StFileType>(1);
 
   /**
    * blogFileType$的订阅
@@ -119,16 +148,23 @@ export class BlogContentComponent implements OnInit, OnDestroy {
     // 当curBlogFiletypes变化时（由blog切换触发）
     this.blogFiletypes$
       .pipe(
-        map((stampedFileTypes: StampedFileTypes): StampedFileType => {
-          const setFileTypes: Set<FileType> = new Set(stampedFileTypes.value);
+        map((fileTypes): StFileType => {
+          const setFileTypes: Set<FileType> = new Set(fileTypes.value);
           // 默认显示优先级
-          const primaries: FileType[] = ['html', 'pdf', 'md', 'default'];
+          const primaries: FileType[] = [
+            'html',
+            'jpg',
+            'png',
+            'pdf',
+            'md',
+            'default',
+          ];
           for (const primary of primaries) {
             if (setFileTypes.has(primary)) {
-              return { stamp: stampedFileTypes.stamp, value: primary };
+              return { stamp: fileTypes.stamp, value: primary };
             }
           }
-          return { stamp: stampedFileTypes.stamp, value: '' };
+          return { stamp: fileTypes.stamp, value: '' };
         }),
         takeUntil(this.destroy$)
       )
@@ -141,15 +177,15 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 可选文件主题（themeType）列表，由当前选中的文件类型（filetype）决定（支持该文件类型的主题有哪些）。
    * @private
    */
-  private blogThemeTypes$: Observable<StampedThemeTypes> = combineLatest([
+  private blogThemeTypes$: Observable<StThemeTypes> = combineLatest([
     this.blogInfo$,
     this.blogFileType$,
   ]).pipe(
-    filter(([blog, fileType]) => {
-      return blog.path === fileType.stamp;
+    filter(([blogInfo, fileType]) => {
+      return blogInfo.stamp === fileType.stamp;
     }),
-    map(([blog, fileType]): StampedThemeTypes => {
-      const themes: ThemeTypes = blog.blogFileInfos
+    map(([blogInfo, fileType]): StThemeTypes => {
+      const themes: ThemeTypes = blogInfo.value.blogFileInfos
         .filter((fileInfo: BlogFileInfo) => {
           return fileInfo.fileType === fileType.value;
         })
@@ -164,37 +200,40 @@ export class BlogContentComponent implements OnInit, OnDestroy {
    * 当前选中的文件主题类型
    * @private
    */
-  private blogThemeType$ = new ReplaySubject<StampedThemeType>(1);
+  private blogThemeType$ = new ReplaySubject<StThemeType>(1);
 
   /**
    * 根据当前blog，文件主题（themeType），文件类型（fileType）确定文件url
    * @public
    */
   public docUrl$: Observable<string> = combineLatest([
+    this.userName$,
     this.blogInfo$,
     this.blogFileType$,
     this.blogThemeType$,
   ]).pipe(
-    filter(([blogInfo, fileType, themeType]): boolean => {
+    filter(([userName, blogInfo, fileType, themeType]): boolean => {
       return (
-        new Set([blogInfo.path, fileType.stamp, themeType.stamp]).size === 1
+        new Set([
+          userName.stamp,
+          blogInfo.stamp,
+          fileType.stamp,
+          themeType.stamp,
+        ]).size === 1
       );
     }),
-    map(([blogInfo, fileType, themeType]): [BlogInfo, FileType, ThemeType] => {
-      return [blogInfo, fileType.value, themeType.value];
-    }),
-    map(([blogInfo, fileType, themeType]): string => {
-      const res = blogInfo.blogFileInfos.find((fileInfo) => {
+    map(([userName, blogInfo, fileType, themeType]): string => {
+      const res = blogInfo.value.blogFileInfos.find((fileInfo) => {
         return (
-          fileInfo.fileType === fileType && fileInfo.themeType === themeType
+          fileInfo.fileType === fileType.value &&
+          fileInfo.themeType === themeType.value
         );
       });
       if (res) {
-        // todo user
         return (
           environment.api.baseUrl +
           'public/blog/' +
-          'default-user' +
+          userName.value +
           res.urlPath
         );
       }
@@ -210,7 +249,7 @@ export class BlogContentComponent implements OnInit, OnDestroy {
     // 由系统主题切换引起的blog主题切换
     combineLatest([this.themeService.currentTheme$, this.blogThemeTypes$])
       .pipe(
-        map(([theme, themeTypes]): StampedThemeType => {
+        map(([theme, themeTypes]): StThemeType => {
           const themes = new Set<ThemeType>(themeTypes.value);
           if (theme === SystemThemeType.default && themes.has('light')) {
             return { stamp: themeTypes.stamp, value: 'light' };
@@ -236,7 +275,7 @@ export class BlogContentComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit() {
-    this.startBlogPath();
+    this.startGetParamsFromRoute();
     this.startBlogFileType();
     this.startBlogThemeType();
   }
