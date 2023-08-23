@@ -1,0 +1,53 @@
+<nz-space nzDirection="vertical" style="width: 100%">
+  <ng-container *ngIf="userCardStates$ | async as userCardStates">
+    <ng-container *ngFor="let state of userCardStates">
+      <nz-card
+        *nzSpaceItem
+        [nzActions]="[actionSetting, actionEdit, actionEllipsis]"
+        style="width: 100%"
+      >
+        <nz-card-meta
+          [nzTitle]="state.name"
+          nzDescription=""
+          [nzAvatar]="avatarTemplate"
+        ></nz-card-meta>
+      </nz-card>
+      <ng-template #avatarTemplate>
+        <nz-avatar nzIcon="user"></nz-avatar>
+      </ng-template>
+      <!--<ng-template #coverTemplate>-->
+      <!--  <img-->
+      <!--    alt="example"-->
+      <!--    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"-->
+      <!--  />-->
+      <!--</ng-template>-->
+      <ng-template #actionSetting>
+        <span nz-icon nzType="setting"></span>
+      </ng-template>
+      <ng-template #actionEdit>
+        <span nz-icon nzType="edit"></span>
+      </ng-template>
+      <ng-template #actionEllipsis>
+        <button
+          *ngIf="(state.selected$ | async) === true"
+          nz-button
+          nzType="primary"
+          nzBlock
+        >
+          当前
+          <span nz-icon nzType="down"></span>
+        </button>
+        <button
+          *ngIf="(state.selected$ | async) === false"
+          nz-button
+          nzType="default"
+          nzBlock
+          (click)="state.selected$.next(true)"
+        >
+          切换至
+          <span nz-icon nzType="right"></span>
+        </button>
+      </ng-template>
+    </ng-container>
+  </ng-container>
+</nz-space>
