@@ -6,7 +6,7 @@ shift
 readonly CONTAINER_NAME=crepus-web-dev
 
 readonly IMAGE_NAME=angular
-readonly IMAGE_TAG=15
+readonly IMAGE_TAG=16
 
 readonly CONTAINER_FILE=dev.dockerfile
 
