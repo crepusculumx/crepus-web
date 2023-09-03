@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BlogService } from '../../services/blog.service';
 
 import { MenusService } from '../../../../layout/services/menus.service';
 import {
-  AsyncSubject,
   combineLatest,
   filter,
   map,
@@ -26,6 +25,7 @@ import {
   ThemeType as SystemThemeType,
 } from '../../../../services/theme.service';
 import { environment } from '../../../../../environments/environment';
+import { BaseComponent } from '../../../../shared/components/base.component';
 
 interface StampedType<T> {
   stamp: string;
@@ -48,15 +48,15 @@ type StThemeTypes = StampedType<ThemeTypes>;
   templateUrl: './blog-content.component.html',
   styleUrls: ['./blog-content.component.less'],
 })
-export class BlogContentComponent implements OnInit, OnDestroy {
+export class BlogContentComponent extends BaseComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private blogService: BlogService,
     private menusService: MenusService,
     private themeService: ThemeService
-  ) {}
-
-  private destroy$ = new AsyncSubject<boolean>();
+  ) {
+    super();
+  }
 
   private userName$ = new ReplaySubject<StUserName>();
 
@@ -278,9 +278,5 @@ export class BlogContentComponent implements OnInit, OnDestroy {
     this.startGetParamsFromRoute();
     this.startBlogFileType();
     this.startBlogThemeType();
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next(true);
   }
 }

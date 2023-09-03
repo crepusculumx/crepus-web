@@ -1,23 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BlogService } from './services/blog.service';
 import { MenusService } from '../../layout/services/menus.service';
 import { BlogTreeData } from './interfaces/blog';
-import { AsyncSubject, map, switchMap, takeUntil } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs';
 import { Menu, Menus } from '../../layout/interfaces/menu';
 import { ActivatedRoute } from '@angular/router';
+import { BaseComponent } from '../../shared/components/base.component';
 
 @Component({
   selector: 'app-blog',
   template: '<router-outlet></router-outlet>',
 })
-export class BlogComponent implements OnInit, OnDestroy {
+export class BlogComponent extends BaseComponent implements OnInit {
   constructor(
     private blogService: BlogService,
     private menusService: MenusService,
     private route: ActivatedRoute
-  ) {}
-
-  private destroy$ = new AsyncSubject<boolean>();
+  ) {
+    super();
+  }
 
   setMenu() {
     function buildMenuFromBlog(
@@ -82,9 +83,5 @@ export class BlogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setMenu();
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next(true);
   }
 }

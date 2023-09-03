@@ -1,21 +1,19 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import {
-  AsyncSubject,
-  BehaviorSubject,
-  Observable,
-  takeUntil,
-  timer,
-} from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, takeUntil, timer } from 'rxjs';
+import { BaseComponent } from '../base.component';
 
 @Component({
   selector: 'app-spin-img',
   templateUrl: './spin-img.component.html',
   styleUrls: ['./spin-img.component.less'],
 })
-export class SpinImgComponent implements OnInit, OnDestroy {
+export class SpinImgComponent extends BaseComponent implements OnInit {
   @Input() imgUrl$!: Observable<string>;
 
-  private destroy$ = new AsyncSubject<boolean>();
+  constructor() {
+    super();
+  }
+
   public spinning$ = new BehaviorSubject<boolean>(true);
 
   public curImgUrl$ = new BehaviorSubject<string | null>(null);
@@ -34,9 +32,5 @@ export class SpinImgComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.startCurImgUrl();
     return;
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next(true);
   }
 }

@@ -10,6 +10,7 @@ import {
 } from 'rxjs';
 import { UserService } from '../../../../../../services/user.service';
 import { BlogService } from '../../../../services/blog.service';
+import { BaseComponent } from '../../../../../../shared/components/base.component';
 
 export interface UserCardState {
   name: string;
@@ -23,13 +24,13 @@ export type UserCardStates = UserCardState[];
   templateUrl: './user-cards.component.html',
   styleUrls: ['./user-cards.component.less'],
 })
-export class UserCardsComponent {
+export class UserCardsComponent extends BaseComponent {
   constructor(
     private userService: UserService,
     private blogService: BlogService
-  ) {}
-
-  private destroy$ = new AsyncSubject<boolean>();
+  ) {
+    super();
+  }
 
   public userCardStates$: Observable<UserCardStates> = combineLatest([
     this.blogService.curUserName$,
