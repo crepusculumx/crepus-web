@@ -54,6 +54,25 @@ export class BlogComponent extends BaseComponent implements OnInit {
       });
     }
 
+    function sortMenus(menus: Menus) {
+      menus.sort((l, r): number => {
+        if (l.children === undefined && r.children != undefined) {
+          return 1;
+        }
+        if (l.children != undefined && r.children === undefined) {
+          return -1;
+        }
+        return Number(l.title < r.title);
+      });
+
+      for (const menu of menus) {
+        if (menu.children) {
+          sortMenus(menu.children);
+        }
+      }
+      return menus;
+    }
+
     this.blogService.curUserName$
       .pipe(
         switchMap((userName: string) => {
@@ -65,6 +84,9 @@ export class BlogComponent extends BaseComponent implements OnInit {
         }),
         map((value): Menus => {
           return buildMenuFromBlog(value.userName, value.blogTreeData, 1);
+        }),
+        map((menus): Menus => {
+          return sortMenus(menus);
         }),
         takeUntil(this.destroy$)
       )
