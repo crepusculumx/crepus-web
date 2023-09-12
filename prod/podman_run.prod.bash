@@ -95,9 +95,10 @@ stop)
   fi
   ;;
 nginx)
-  if [ $CUR_STATE == stop ]; then
-    container_action_start "${CONTAINER_ID}"
+  if [ $CUR_STATE == run ]; then
+    container_action_stop "${CONTAINER_ID}"
   fi
+  container_action_start "${CONTAINER_ID}"
   container_action_nginx "${CONTAINER_ID}"
   ;;
 *)
