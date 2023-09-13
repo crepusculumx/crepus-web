@@ -1,0 +1,7 @@
+<ng-container *ngIf="curPdfUrl$ | async as pdfUrl">
+  <pdf-viewer
+    [src]="pdfUrl"
+    [render-text]="true"
+    [original-size]="true"
+  ></pdf-viewer>
+</ng-container>
