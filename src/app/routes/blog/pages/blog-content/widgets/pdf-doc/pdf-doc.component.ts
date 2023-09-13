@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-pdf-doc',
@@ -9,4 +9,6 @@ import { Observable } from 'rxjs';
 export class PdfDocComponent {
   @Input()
   public docUrl$!: Observable<string>;
+
+  public openView$ = new BehaviorSubject<boolean>(false);
 }

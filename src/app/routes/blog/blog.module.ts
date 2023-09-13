@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { BlogRoutingModule } from './blog-routing.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -22,6 +23,6 @@ import { PdfDocComponent } from './pages/blog-content/widgets/pdf-doc/pdf-doc.co
     ImgDocComponent,
     PdfDocComponent,
   ],
-  imports: [CommonModule, BlogRoutingModule, SharedModule],
+  imports: [CommonModule, BlogRoutingModule, SharedModule, FormsModule],
 })
 export class BlogModule {}
