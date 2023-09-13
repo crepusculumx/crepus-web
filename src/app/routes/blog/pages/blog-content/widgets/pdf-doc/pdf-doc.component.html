@@ -1,0 +1,19 @@
+<nz-card>
+  <nz-space>
+    <nz-switch
+      *nzSpaceItem
+      nzCheckedChildren="开"
+      nzUnCheckedChildren="关"
+      [ngModel]="openView$ | async"
+      (ngModelChange)="openView$.next(!openView$.value)"
+    ></nz-switch>
+
+    <nz-anchor *nzSpaceItem [nzAffix]="false">
+      <nz-link nzHref="#pdf" nzTitle="前往正文"></nz-link>
+    </nz-anchor>
+  </nz-space>
+</nz-card>
+
+<ng-container *ngIf="openView$ | async">
+  <app-pdf-viewer id="pdf" [pdfUrl$]="docUrl$"></app-pdf-viewer>
+</ng-container>
