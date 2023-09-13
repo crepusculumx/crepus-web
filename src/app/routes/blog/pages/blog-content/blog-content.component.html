@@ -23,5 +23,8 @@
     <ng-container *ngIf="fileType.value === 'jpg'">
       <app-img-doc *nzSpaceItem [docUrl$]="docUrl$"></app-img-doc>
     </ng-container>
+    <ng-container *ngIf="fileType.value === 'pdf'">
+      <app-pdf-doc *nzSpaceItem [docUrl$]="docUrl$"></app-pdf-doc>
+    </ng-container>
   </ng-container>
 </nz-space>
