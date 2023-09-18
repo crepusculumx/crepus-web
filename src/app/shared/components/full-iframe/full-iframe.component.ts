@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
-  AsyncSubject,
+  BehaviorSubject,
   fromEvent,
   map,
   Observable,
@@ -10,6 +10,7 @@ import {
   takeUntil,
   timer,
 } from 'rxjs';
+import { BaseComponent } from '../base.component';
 
 // Blocked a frame with origin “xxx“ from accessing a cross-origin frame
 // script in iframe
@@ -40,11 +41,18 @@ interface IframeMsg extends Event {
   templateUrl: './full-iframe.component.html',
   styleUrls: ['./full-iframe.component.less'],
 })
-export class FullIframeComponent implements OnInit, OnDestroy {
+export class FullIframeComponent
+  extends BaseComponent
+  implements OnInit, OnDestroy
+{
   @Input()
   public iframeUrl$!: Observable<string>;
 
-  public curIframeUrl$ = new ReplaySubject<string | null>();
+  constructor() {
+    super();
+  }
+
+  public curIframeUrl$ = new BehaviorSubject<string | null>(null);
 
   /**
    * 如果切换iframe的url，会导致浏览器将切换记录保存到历史记录，使后退键错乱（从后退路由改为后退iframe url）。
@@ -61,8 +69,6 @@ export class FullIframeComponent implements OnInit, OnDestroy {
         });
     });
   }
-
-  private destroy$ = new AsyncSubject<boolean>();
 
   public height$ = new ReplaySubject<number>(1);
 
@@ -87,9 +93,5 @@ export class FullIframeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.startCurIframeUrl();
     this.startHeight();
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next(true);
   }
 }

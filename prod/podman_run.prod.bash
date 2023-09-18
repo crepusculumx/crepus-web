@@ -34,6 +34,12 @@ function container_action_shell() {
   podman exec -it "${CONTAINER_ID}" /bin/${SHELL}
 }
 
+function container_action_nginx() {
+  local CONTAINER_ID=$1
+  shift
+  podman exec "${CONTAINER_ID}" service nginx restart
+}
+
 # 如果没有容器，创建个新的
 if [ -z "${CONTAINER_ID}" ]; then
 
@@ -87,6 +93,13 @@ stop)
   if [ $CUR_STATE == run ]; then
     container_action_stop "${CONTAINER_ID}"
   fi
+  ;;
+nginx)
+  if [ $CUR_STATE == run ]; then
+    container_action_stop "${CONTAINER_ID}"
+  fi
+  container_action_start "${CONTAINER_ID}"
+  container_action_nginx "${CONTAINER_ID}"
   ;;
 *)
   echo invalid action: "${SCRIPT_ACTION}" 1>&2

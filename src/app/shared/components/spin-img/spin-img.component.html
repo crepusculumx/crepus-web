@@ -1,0 +1,11 @@
+<ng-container *ngIf="curImgUrl$ | async as curImgUrl">
+  <nz-spin [nzSpinning]="spinning$ | async">
+    <img
+      nz-image
+      width="100%"
+      [nzSrc]="curImgUrl"
+      alt=""
+      (load)="spinning$.next(false)"
+    />
+  </nz-spin>
+</ng-container>

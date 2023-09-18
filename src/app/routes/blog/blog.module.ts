@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { BlogRoutingModule } from './blog-routing.module';
 import { SharedModule } from '../../shared/shared.module';
@@ -10,6 +11,7 @@ import { BlogWelcomeComponent } from './pages/blog-welcome/blog-welcome.componen
 import { BlogComponent } from './blog.component';
 import { UserCardsComponent } from './pages/blog-welcome/widgets/user-cards/user-cards.component';
 import { ImgDocComponent } from './pages/blog-content/widgets/img-doc/img-doc.component';
+import { PdfDocComponent } from './pages/blog-content/widgets/pdf-doc/pdf-doc.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { ImgDocComponent } from './pages/blog-content/widgets/img-doc/img-doc.co
     BlogComponent,
     UserCardsComponent,
     ImgDocComponent,
+    PdfDocComponent,
   ],
-  imports: [CommonModule, BlogRoutingModule, SharedModule],
+  imports: [CommonModule, BlogRoutingModule, SharedModule, FormsModule],
 })
 export class BlogModule {}

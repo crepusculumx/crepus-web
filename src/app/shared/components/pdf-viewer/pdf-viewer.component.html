@@ -1,0 +1,13 @@
+<ng-container *ngIf="curPdfUrl$ | async as pdfUrl">
+  <ng-container *ngIf="zoom$ | async as zoom">
+    <ng-container *ngIf="page$ | async as page">
+      <pdf-viewer
+        [src]="pdfUrl"
+        [render-text]="true"
+        [zoom]="zoom"
+        [page]="page"
+        (pageChange)="page$.next($event)"
+      ></pdf-viewer>
+    </ng-container>
+  </ng-container>
+</ng-container>
