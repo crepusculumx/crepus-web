@@ -62,7 +62,13 @@ export class BlogComponent extends BaseComponent implements OnInit {
         if (l.children != undefined && r.children === undefined) {
           return -1;
         }
-        return Number(l.title > r.title);
+        if (l.title > r.title) {
+          return 1;
+        } else if (l.title < r.title) {
+          return -1;
+        } else {
+          return 0;
+        }
       });
 
       for (const menu of menus) {
