@@ -1,19 +1,67 @@
-<nz-card>
-  <nz-space>
-    <nz-switch
-      *nzSpaceItem
-      nzCheckedChildren="开"
-      nzUnCheckedChildren="关"
-      [ngModel]="openView$ | async"
-      (ngModelChange)="openView$.next(!openView$.value)"
-    ></nz-switch>
+<nz-card id="toolbar">
+  <nz-space [nzSplit]="spaceSplit">
+    <ng-template #spaceSplit>
+      <nz-divider nzType="vertical"></nz-divider>
+    </ng-template>
+
+    <div *nzSpaceItem>
+      加载：
+      <nz-switch
+        nzCheckedChildren="开"
+        nzUnCheckedChildren="关"
+        [ngModel]="openView$ | async"
+        (ngModelChange)="openView$.next($event)"
+      ></nz-switch>
+    </div>
 
     <nz-anchor *nzSpaceItem [nzAffix]="false">
       <nz-link nzHref="#pdf" nzTitle="前往正文"></nz-link>
     </nz-anchor>
+
+    <nz-anchor *nzSpaceItem [nzAffix]="false">
+      <nz-link nzHref="#toolbar" nzTitle="前往工具栏"></nz-link>
+    </nz-anchor>
+    <!--    <div *nzSpaceItem>-->
+    <!--      原始高度：-->
+    <!--      <nz-switch-->
+    <!--        nzCheckedChildren="开"-->
+    <!--        nzUnCheckedChildren="关"-->
+    <!--        [ngModel]="originalSize$ | async"-->
+    <!--        (ngModelChange)="originalSize$.next($event)"-->
+    <!--      ></nz-switch>-->
+    <!--    </div>-->
+
+    <div *nzSpaceItem>
+      pdf缩放：
+      <nz-input-number
+        [ngModel]="zoomPercent$ | async"
+        (ngModelChange)="zoomPercent$.next($event)"
+        [nzMin]="0"
+        [nzMax]="1000"
+        [nzStep]="10"
+        [nzFormatter]="formatterPercent"
+        [nzParser]="parserPercent"
+      ></nz-input-number>
+    </div>
+
+    <div *nzSpaceItem>
+      页码：
+      <nz-input-number
+        [ngModel]="page$ | async"
+        (ngModelChange)="page$.next($event)"
+        [nzMin]="0"
+        [nzMax]="100000"
+        [nzStep]="1"
+      ></nz-input-number>
+    </div>
   </nz-space>
 </nz-card>
 
 <ng-container *ngIf="openView$ | async">
-  <app-pdf-viewer id="pdf" [pdfUrl$]="docUrl$"></app-pdf-viewer>
+  <app-pdf-viewer
+    id="pdf"
+    [pdfUrl$]="docUrl$"
+    [zoom$]="zoom$"
+    [page$]="page$"
+  ></app-pdf-viewer>
 </ng-container>

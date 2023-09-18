@@ -1,5 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, takeUntil, timer } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  takeUntil,
+  timer,
+} from 'rxjs';
 import { BaseComponent } from '../base.component';
 
 @Component({
@@ -9,6 +16,9 @@ import { BaseComponent } from '../base.component';
 })
 export class PdfViewerComponent extends BaseComponent implements OnInit {
   @Input() pdfUrl$!: Observable<string>;
+  @Input() zoom$!: Observable<number>;
+  @Input() page$: BehaviorSubject<number> = new BehaviorSubject<number>(1);
+  // @Input() originalSize$!: Observable<boolean>;
 
   public curPdfUrl$ = new BehaviorSubject<string | null>(null);
 
@@ -28,8 +38,5 @@ export class PdfViewerComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.startCurPdfUrl();
-    this.curPdfUrl$.subscribe((x) => {
-      console.log(x);
-    });
   }
 }

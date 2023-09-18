@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-pdf-doc',
@@ -11,4 +11,19 @@ export class PdfDocComponent {
   public docUrl$!: Observable<string>;
 
   public openView$ = new BehaviorSubject<boolean>(false);
+
+  public zoomPercent$ = new BehaviorSubject<number>(100);
+
+  public zoom$ = this.zoomPercent$.pipe(
+    map((zoom) => {
+      return zoom / 100;
+    })
+  );
+
+  // public originalSize$ = new BehaviorSubject<boolean>(true);
+
+  public page$ = new BehaviorSubject<number>(1);
+
+  formatterPercent = (value: number): string => `${value} %`;
+  parserPercent = (value: string): string => value.replace(' %', '');
 }
