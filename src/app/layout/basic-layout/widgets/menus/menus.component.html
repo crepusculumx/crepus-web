@@ -2,7 +2,6 @@
   @for (menu of menus; track $index) {
     @if (menu.children) {
       <li
-        *ngIf="menu.children"
         nz-submenu
         [nzPaddingLeft]="menu.level * 24"
         [nzOpen]="menu.open"
@@ -16,7 +15,6 @@
       </li>
     } @else {
       <li
-        *ngIf="!menu.children"
         nz-menu-item
         [nzPaddingLeft]="menu.level * 24"
         [nzDisabled]="menu.disabled"
@@ -24,7 +22,9 @@
         nzMatchRouter
         [routerLink]="menu.routerLink"
       >
-        <span nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></span>
+        @if (menu.icon) {
+          <span nz-icon [nzType]="menu.icon"></span>
+        }
         <span class="menu-title">{{ menu.title }}</span>
       </li>
     }

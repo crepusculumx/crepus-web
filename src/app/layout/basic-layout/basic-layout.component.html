@@ -1,11 +1,15 @@
 <nz-layout class="app-layout">
   <nz-sider
     class="menu-sidebar"
-    [nzWidth]="siderWidth"
+    [nzWidth]="siderWidth()"
     nz-resizable
     [nzMinWidth]="50"
     [nzMaxWidth]="1000"
     (nzResize)="onSideResize($event)"
+    nzCollapsible
+    [nzCollapsed]="isCollapsed()"
+    [nzCollapsedWidth]="0"
+    [nzTrigger]="null"
   >
     <nz-resize-handle nzDirection="right" nzCursorType="grid">
       <div class="sider-resize-line"></div>
@@ -14,37 +18,25 @@
       <a routerLink="/">
         <img
           ngSrc="./assets/crepusculumx.svg"
+          priority="priority"
           alt="logo"
           height="16"
           width="16"
         />
       </a>
     </div>
-    <ng-container *ngIf="menus$ | async as menus">
+    @if (menus(); as menus) {
       <app-layout-menus [menus]="menus"></app-layout-menus>
-    </ng-container>
-    <div
-      class="sidebar-trigger"
-      (click)="isCollapsed$.next(!isCollapsed$.value)"
-    >
-      <i
-        class="trigger"
-        nz-icon
-        [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"
-      ></i>
-    </div>
+    }
   </nz-sider>
   <nz-layout class="right-layout">
     <nz-header>
       <div class="app-header">
-        <span
-          class="header-trigger"
-          (click)="isCollapsed$.next(!isCollapsed$.value)"
-        >
+        <span class="header-trigger" (click)="isCollapsed.set(!isCollapsed())">
           <i
             class="trigger"
             nz-icon
-            [nzType]="(isCollapsed$ | async) ? 'menu-unfold' : 'menu-fold'"
+            [nzType]="isCollapsed() ? 'menu-unfold' : 'menu-fold'"
           ></i>
         </span>
         <span class="header-trigger" (click)="themeService.toggleTheme()">
