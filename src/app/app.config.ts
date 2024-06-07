@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -8,6 +12,8 @@ import zh from '@angular/common/locales/zh';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
+import { StartupService } from './services/startup.service';
+import { AppInitializerProvider } from './services/app-initializer.service';
 
 registerLocaleData(zh);
 
@@ -18,5 +24,15 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
     provideHttpClient(),
+    AppInitializerProvider,
+    // provideHttpClient(withInterceptors([jwtInterceptor])),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (startupService: StartupService) => () => {
+        return startupService.startup().toPromise();
+      },
+      deps: [StartupService],
+      multi: true,
+    },
   ],
 };
