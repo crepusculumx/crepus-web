@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HtmlDocComponent } from './widgets/html-doc/html-doc.component';
 import { ImgDocComponent } from './widgets/img-doc/img-doc.component';
 import { PdfDocComponent } from './widgets/pdf-doc/pdf-doc.component';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, from, map, Observable, of, switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { BlogService } from '../../services/blog.service';
 import { MenusService } from '../../../../layout/services/menus.service';
@@ -62,6 +62,13 @@ export class BlogContentComponent {
   private blogPath$ = this.route.paramMap.pipe(
     map((params) => {
       return params.get('filePath');
+    }),
+    switchMap((blogPath) => {
+      if (blogPath === null) {
+        return of(null);
+      } else {
+        return from([null, blogPath]); // insert null to clear downstream data
+      }
     }),
   );
 
