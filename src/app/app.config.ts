@@ -11,9 +11,10 @@ import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { StartupService } from './services/startup.service';
 import { AppInitializerProvider } from './services/app-initializer.service';
+import { defaultInterceptor } from './interceptors/default.interceptor';
 
 registerLocaleData(zh);
 
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(),
     AppInitializerProvider,
-    // provideHttpClient(withInterceptors([jwtInterceptor])),
+    provideHttpClient(withInterceptors([defaultInterceptor])),
     {
       provide: APP_INITIALIZER,
       useFactory: (startupService: StartupService) => () => {

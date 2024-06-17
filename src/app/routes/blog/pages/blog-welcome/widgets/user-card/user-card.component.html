@@ -1,0 +1,38 @@
+<nz-card
+  [nzActions]="[actionSetting, actionEdit, actionEllipsis]"
+  style="width: 100%"
+>
+  <nz-card-meta
+    [nzTitle]="name"
+    nzDescription=""
+    [nzAvatar]="avatarTemplate"
+  ></nz-card-meta>
+</nz-card>
+<ng-template #avatarTemplate>
+  <nz-avatar nzIcon="user"></nz-avatar>
+</ng-template>
+<!--<ng-template #coverTemplate>-->
+<!--  <img-->
+<!--    alt="example"-->
+<!--    src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"-->
+<!--  />-->
+<!--</ng-template>-->
+<ng-template #actionSetting>
+  <span nz-icon nzType="setting"></span>
+</ng-template>
+<ng-template #actionEdit>
+  <span nz-icon nzType="edit"></span>
+</ng-template>
+<ng-template #actionEllipsis>
+  @if (selected) {
+    <button nz-button nzType="primary" nzBlock>
+      当前
+      <span nz-icon nzType="down"></span>
+    </button>
+  } @else {
+    <button nz-button nzType="default" nzBlock (click)="onSelect()">
+      切换至
+      <span nz-icon nzType="right"></span>
+    </button>
+  }
+</ng-template>

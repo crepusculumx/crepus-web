@@ -1,0 +1,10 @@
+<nz-space nzDirection="vertical" style="width: 100%">
+  @if (userCardStates(); as userCardStates) {
+    @for (state of userCardStates; track $index) {
+      <app-user-card
+        [name]="state.name"
+        [selected]="state.selected"
+      ></app-user-card>
+    }
+  }
+</nz-space>

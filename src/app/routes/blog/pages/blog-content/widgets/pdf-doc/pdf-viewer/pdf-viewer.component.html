@@ -1,0 +1,70 @@
+<nz-card id="toolbar">
+  <nz-space [nzSplit]="spaceSplit">
+    <ng-template #spaceSplit>
+      <nz-divider nzType="vertical"></nz-divider>
+    </ng-template>
+
+    <div *nzSpaceItem>
+      加载：
+      <nz-switch
+        nzCheckedChildren="开"
+        nzUnCheckedChildren="关"
+        [ngModel]="openView()"
+        (ngModelChange)="openView.set($event)"
+      ></nz-switch>
+    </div>
+
+    <nz-anchor *nzSpaceItem [nzAffix]="false">
+      <nz-link nzHref="#pdf" nzTitle="前往正文"></nz-link>
+    </nz-anchor>
+
+    <nz-anchor *nzSpaceItem [nzAffix]="false">
+      <nz-link nzHref="#toolbar" nzTitle="前往工具栏"></nz-link>
+    </nz-anchor>
+    <!--    <div *nzSpaceItem>-->
+    <!--      原始高度：-->
+    <!--      <nz-switch-->
+    <!--        nzCheckedChildren="开"-->
+    <!--        nzUnCheckedChildren="关"-->
+    <!--        [ngModel]="originalSize$ | async"-->
+    <!--        (ngModelChange)="originalSize$.next($event)"-->
+    <!--      ></nz-switch>-->
+    <!--    </div>-->
+
+    <div *nzSpaceItem>
+      pdf缩放：
+      <nz-input-number
+        [ngModel]="zoomPercent()"
+        (ngModelChange)="zoomPercent.set($event)"
+        [nzMin]="0"
+        [nzMax]="1000"
+        [nzStep]="10"
+        [nzFormatter]="formatterPercent"
+        [nzParser]="parserPercent"
+      ></nz-input-number>
+    </div>
+
+    <div *nzSpaceItem>
+      页码：
+      <nz-input-number
+        [ngModel]="page()"
+        (ngModelChange)="page.set($event)"
+        [nzMin]="1"
+        [nzMax]="100000"
+        [nzStep]="1"
+      ></nz-input-number>
+    </div>
+  </nz-space>
+</nz-card>
+
+@if (openView()) {
+  <pdf-viewer
+    id="pdf"
+    [src]="url"
+    [render-text]="true"
+    [zoom]="zoom()"
+    [page]="page()"
+    (pageChange)="page.set($event)"
+  >
+  </pdf-viewer>
+}

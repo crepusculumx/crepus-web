@@ -1,0 +1,36 @@
+<nz-space nzDirection="vertical" style="width: 100%">
+  @if (blogInfo(); as blogInfo) {
+    <nz-page-header
+      *nzSpaceItem
+      class="site-page-header"
+      [nzTitle]="blogInfo.title"
+      [nzGhost]="false"
+    >
+      @if (breadcrumbs(); as breadcrumbs) {
+        <nz-breadcrumb nzSeparator=">" nz-page-header-breadcrumb>
+          @for (breadcrumb of breadcrumbs; track $index) {
+            <nz-breadcrumb-item>
+              {{ breadcrumb }}
+            </nz-breadcrumb-item>
+          }
+        </nz-breadcrumb>
+      }
+    </nz-page-header>
+  }
+
+  @if (blogFileType(); as blogFileType) {
+    @if (docUrl(); as docUrl) {
+      @if (blogFileType === "html") {
+        <app-html-doc *nzSpaceItem [docUrl]="docUrl"></app-html-doc>
+      } @else if (
+        blogFileType === "jpg" ||
+        blogFileType === "png" ||
+        blogFileType === "svg"
+      ) {
+        <app-img-doc *nzSpaceItem [docUrl]="docUrl"></app-img-doc>
+      } @else if (blogFileType === "pdf") {
+        <app-pdf-doc *nzSpaceItem [docUrl]="docUrl"></app-pdf-doc>
+      }
+    }
+  }
+</nz-space>

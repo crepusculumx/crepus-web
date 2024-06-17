@@ -1,0 +1,9 @@
+<nz-spin [nzSpinning]="spinning()">
+  <img
+    nz-image
+    width="100%"
+    [nzSrc]="imgUrl"
+    alt=""
+    (load)="spinning.set(false)"
+  />
+</nz-spin>
