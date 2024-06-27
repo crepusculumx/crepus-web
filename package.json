@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^18.0.5",
     "@angular/router": "^18.0.5",
     "@ant-design/icons-angular": "17",
-    "ng-zorro-antd": "17.4.1",
+    "ng-zorro-antd": "18.0.0",
     "ng2-pdf-viewer": "^10.2.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
