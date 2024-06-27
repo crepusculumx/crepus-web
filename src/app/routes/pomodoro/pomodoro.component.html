@@ -1,0 +1,106 @@
+<nz-page-header
+  class="site-page-header"
+  nzTitle="番茄"
+  [nzGhost]="false"
+></nz-page-header>
+
+<nz-card class="toolbar">
+  @if (running()) {
+    <nz-countdown
+      [nzValue]="deadline()"
+      nzTitle="倒计时"
+      [nzFormat]="'HH:mm:ss'"
+      (nzCountdownFinish)="onCountdownFinish()"
+    ></nz-countdown>
+  } @else {
+    <nz-statistic nzValue="00:00:00" nzTitle="倒计时"></nz-statistic>
+  }
+</nz-card>
+
+<nz-card>
+  <div class="toolbar" nz-row>
+    <div nz-col nzSpan="3">
+      <nz-select
+        [ngModel]="types()"
+        [disabled]="running()"
+        (ngModelChange)="type.set($event)"
+      >
+        @for (type of types(); track $index) {
+          <nz-option [nzValue]="type" [nzLabel]="type"></nz-option>
+        }
+      </nz-select>
+    </div>
+    <div nz-col nzSpan="15">
+      <input
+        nz-input
+        placeholder="任务描述"
+        [ngModel]="message()"
+        (ngModelChange)="message.set($event)"
+        [disabled]="running()"
+      />
+    </div>
+    <div nz-col nzSpan="3">
+      <nz-input-number-group nzAddOnAfter="分钟">
+        <nz-input-number
+          [ngModel]="timeLen()"
+          (ngModelChange)="timeLen.set($event)"
+          [disabled]="running()"
+          [nzMin]="1"
+          [nzStep]="1"
+        ></nz-input-number>
+      </nz-input-number-group>
+    </div>
+
+    <div nz-col nzSpan="3">
+      @if (running()) {
+        <button
+          nz-button
+          nzType="default"
+          nzDanger
+          (click)="running.set(false)"
+        >
+          结束任务
+        </button>
+      } @else {
+        <button
+          nz-button
+          nzType="primary"
+          (click)="onCountdownStart()"
+          [disabled]="startDisable()"
+        >
+          启动任务
+        </button>
+      }
+    </div>
+  </div>
+</nz-card>
+
+<nz-card class="toolbar">
+  <nz-statistic
+    [nzValue]="
+      totalTime() === undefined
+        ? '加载中'
+        : (totalTime() | date: 'HH\' h\' mm \' min\' ' : 'UTC')!
+    "
+    nzTitle="今日完成总时间"
+  ></nz-statistic>
+</nz-card>
+
+<nz-card>
+  <nz-timeline>
+    @for (info of todayInfos(); track $index) {
+      <nz-timeline-item
+        [nzLabel]="
+          (info.startTime | date: 'HH:mm' : 'GMT+08:00')! +
+          '-' +
+          (info.endTime | date: 'HH:mm' : 'GMT+08:00')!
+        "
+      >
+        {{ info.type }}
+        @if (info.message !== "") {
+          ，{{ info.message }}
+        }
+      </nz-timeline-item>
+    }
+  </nz-timeline>
+</nz-card>

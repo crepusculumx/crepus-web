@@ -13,4 +13,9 @@ export default [
     component: BasicLayoutComponent,
     loadChildren: () => import('./blog/routes'),
   },
+  {
+    path: 'pomodoro',
+    component: BasicLayoutComponent,
+    loadChildren: () => import('./pomodoro/routes'),
+  },
 ] as Route[];
