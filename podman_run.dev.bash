@@ -8,7 +8,7 @@ readonly PROJECT_NAME=crepus-web
 readonly CONTAINER_NAME=${PROJECT_NAME}-dev
 
 readonly IMAGE_NAME=angular
-readonly IMAGE_TAG=17-node-20.9.0
+readonly IMAGE_TAG=18-node-20.9.0
 
 readonly CONTAINER_FILE=dev.dockerfile
 
